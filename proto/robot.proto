@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package robot;
+
+service RobotService {
+  rpc SetJoy(JoyRequest) returns (Empty);
+}
+
+message JoyRequest {
+  float left_x = 1;
+  float left_y = 2;
+  float right_x = 3;
+  float right_y = 4;
+}
+
+message Empty {}
