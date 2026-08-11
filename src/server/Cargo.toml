@@ -11,6 +11,10 @@ prost = "0.14"
 tonic-prost = "0.14"
 tonic-reflection = "0.14.6"
 tower-http = {version = "0.6", features = ["cors"]}
+rclrs = "0.7"
+sensor_msgs = {
+    path = "/opt/ros/jazzy/share/sensor_msgs/rust"
+}
 
 [build-dependencies]
 tonic-prost-build = "0.14"
