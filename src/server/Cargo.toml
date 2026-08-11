@@ -15,6 +15,7 @@ rclrs = "0.7"
 sensor_msgs = {
     path = "/opt/ros/jazzy/share/sensor_msgs/rust"
 }
+tokio-stream = {version = "0.1.19", features = ["sync"]}
 
 [build-dependencies]
 tonic-prost-build = "0.14"

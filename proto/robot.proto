@@ -4,9 +4,17 @@ package robot;
 
 service RobotService {
   rpc SetJoy(JoyRequest) returns (Empty);
+  rpc SubscribeJoy(Empty) returns (stream JoyResponse);
 }
 
 message JoyRequest {
+  float left_x = 1;
+  float left_y = 2;
+  float right_x = 3;
+  float right_y = 4;
+}
+
+message JoyResponse {
   float left_x = 1;
   float left_y = 2;
   float right_x = 3;

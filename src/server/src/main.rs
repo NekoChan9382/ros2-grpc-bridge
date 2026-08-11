@@ -1,10 +1,7 @@
-use rclrs::{
-    Context, CreateBasicExecutor, Executor, Publisher, RclrsError, RclrsErrorFilter, SpinOptions,
-};
-use sensor_msgs::msg::Joy;
+use rclrs::{Context, CreateBasicExecutor, RclrsErrorFilter, SpinOptions};
 use std::sync::Arc;
+use tokio::sync::broadcast;
 use tonic::transport::Server;
-use tonic::{Request, Response, Status};
 use tonic_reflection::server::Builder;
 use tonic_web::GrpcWebLayer;
 use tower_http::cors::{Any, CorsLayer};
@@ -12,62 +9,25 @@ use tower_http::cors::{Any, CorsLayer};
 pub mod robot {
     tonic::include_proto!("robot");
 }
+mod grpc;
+mod ros;
 
-use robot::{
-    Empty, JoyRequest,
-    robot_service_server::{RobotService, RobotServiceServer},
-};
+use grpc::RobotServer;
+use ros::JoyNode;
 
-struct JoyNode {
-    publisher: Arc<Publisher<Joy>>,
-}
-
-impl JoyNode {
-    fn new(executor: &Executor) -> Result<Self, RclrsError> {
-        let node = executor.create_node("grpc_bridge")?;
-        let publisher = node.create_publisher::<Joy>("/joy")?;
-        Ok(Self {
-            publisher: Arc::new(publisher),
-        })
-    }
-}
-
-struct RobotServer {
-    node: Arc<JoyNode>,
-}
-
-#[tonic::async_trait]
-impl RobotService for RobotServer {
-    async fn set_joy(&self, request: Request<JoyRequest>) -> Result<Response<Empty>, Status> {
-        let joy_req = request.into_inner();
-
-        println!("left_x={}, left_y={}", joy_req.left_x, joy_req.left_y);
-        let mut joy = Joy::default();
-        joy.axes = vec![
-            joy_req.left_x,
-            joy_req.left_y,
-            joy_req.right_x,
-            joy_req.right_y,
-        ];
-        joy.buttons = vec![];
-        self.node
-            .publisher
-            .publish(joy)
-            .map_err(|e| Status::internal(e.to_string()))?;
-
-        Ok(Response::new(Empty {}))
-    }
-}
+use robot::robot_service_server::RobotServiceServer;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "0.0.0.0:50051".parse()?;
     let context = Context::default_from_env()?;
     let mut executor = context.create_basic_executor();
-    let node = JoyNode::new(&executor)?;
+    let (joy_tx, _) = broadcast::channel(32);
+    let node = JoyNode::new(&executor, joy_tx.clone())?;
 
     let service = RobotServiceServer::new(RobotServer {
-        node: Arc::new(node),
+        ros: Arc::new(node),
+        joy_tx: joy_tx,
     });
 
     let cors = CorsLayer::new()

@@ -1014,6 +1014,7 @@ dependencies = [
  "rclrs",
  "sensor_msgs",
  "tokio",
+ "tokio-stream",
  "tonic",
  "tonic-prost",
  "tonic-prost-build",
@@ -1210,6 +1211,7 @@ dependencies = [
  "futures-core",
  "pin-project-lite",
  "tokio",
+ "tokio-util",
 ]
 
 [[package]]
