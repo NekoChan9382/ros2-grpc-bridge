@@ -1,4 +1,3 @@
-import './App.css'
 import { GrpcProvider } from "./GrpcContext";
 import { Testdayo } from "./Test";
 
