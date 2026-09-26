@@ -10,7 +10,7 @@ service RosBridge {
 message TopicMessage {
   string topic = 1;
   string type = 2;
-  bytes data = 3;
+  bytes json = 3;
 }
 
 message SubscribeRequest {

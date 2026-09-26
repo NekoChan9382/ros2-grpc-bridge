@@ -3,6 +3,8 @@ import { useGrpc } from "./GrpcContext";
 
 export const Testdayo: React.FC = () => {
   const { client } = useGrpc();
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
 
   const [axes, setAxes] = useState<number[]>([]);
 
@@ -11,13 +13,13 @@ export const Testdayo: React.FC = () => {
     let cancel = false;
     const receive = async () => {
       try {
-        const stream = client.subscribeJoy({});
-        for await (const joy of stream) {
+        const stream = client.subscribe({ topic: "/joy", type: "sensor_msgs/msg/Joy" });
+        for await (const message of stream) {
           if (cancel) break;
-          console.log("data came!");
-          setAxes([joy.leftX, joy.leftY, joy.rightX, joy.rightY]);
+          const joy = JSON.parse(decoder.decode(message.json)) as { axes?: number[] };
+          setAxes(joy.axes ?? []);
         }
-      } catch (e) { if (!cancel) { console.error("SubscribeJoy failed: ", e); } }
+      } catch (e) { if (!cancel) { console.error("Subscribe failed: ", e); } }
     }
     receive();
     console.log("subscription");
@@ -26,7 +28,11 @@ export const Testdayo: React.FC = () => {
 
   const joy = async () => {
     if (!client) return null;
-    await client.setJoy({ leftX: 10.1, leftY: 12.2, rightX: 14.4, rightY: 16.6 })
+    await client.publish({
+      topic: "/joy",
+      type: "sensor_msgs/msg/Joy",
+      json: encoder.encode(JSON.stringify({ axes: [10.1, 12.2, 14.4, 16.6], buttons: [] })),
+    });
   };
   return (<><button onClick={joy}>Send</button><p>axes: {axes.join(", ")}</p></>)
 };
