@@ -254,13 +254,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "builtin_interfaces"
-version = "2.0.4"
-dependencies = [
- "rosidl_runtime_rs",
-]
-
-[[package]]
 name = "bumpalo"
 version = "3.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -464,15 +457,6 @@ dependencies = [
  "memchr",
  "pin-project-lite",
  "slab",
-]
-
-[[package]]
-name = "geometry_msgs"
-version = "5.3.8"
-dependencies = [
- "builtin_interfaces",
- "rosidl_runtime_rs",
- "std_msgs",
 ]
 
 [[package]]
@@ -1012,7 +996,9 @@ version = "0.1.0"
 dependencies = [
  "prost",
  "rclrs",
- "sensor_msgs",
+ "rosidl_runtime_rs",
+ "serde",
+ "serde_json",
  "tokio",
  "tokio-stream",
  "tonic",
@@ -1067,14 +1053,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "sensor_msgs"
-version = "5.3.8"
+name = "serde"
+version = "1.0.229"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba"
 dependencies = [
- "builtin_interfaces",
- "geometry_msgs",
- "rosidl_runtime_rs",
- "service_msgs",
- "std_msgs",
+ "serde_core",
 ]
 
 [[package]]
@@ -1098,11 +1082,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "service_msgs"
-version = "2.0.4"
+name = "serde_json"
+version = "1.0.151"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c841b55ecdae098c80dcae9cf767f6f8a0c2cdb3416bbef72181df4d0fe73f14"
 dependencies = [
- "builtin_interfaces",
- "rosidl_runtime_rs",
+ "itoa",
+ "memchr",
+ "serde",
+ "serde_core",
+ "zmij",
 ]
 
 [[package]]
@@ -1125,14 +1114,6 @@ checksum = "c3d1e2c7f27f8d4cb10542a02c49005dbd6e93095799d6f3be745fae9f8fedd4"
 dependencies = [
  "libc",
  "windows-sys",
-]
-
-[[package]]
-name = "std_msgs"
-version = "5.3.8"
-dependencies = [
- "builtin_interfaces",
- "rosidl_runtime_rs",
 ]
 
 [[package]]
@@ -1543,6 +1524,12 @@ dependencies = [
  "windows-link",
 ]
 
+[[package]]
+name = "zmij"
+version = "1.0.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
+
 [[patch.unused]]
 name = "action_msgs"
 version = "2.0.4"
@@ -1556,6 +1543,10 @@ name = "actionlib_msgs"
 version = "5.3.8"
 
 [[patch.unused]]
+name = "builtin_interfaces"
+version = "2.0.4"
+
+[[patch.unused]]
 name = "composition_interfaces"
 version = "2.0.4"
 
@@ -1566,6 +1557,10 @@ version = "5.3.8"
 [[patch.unused]]
 name = "example_interfaces"
 version = "0.12.1"
+
+[[patch.unused]]
+name = "geometry_msgs"
+version = "5.3.8"
 
 [[patch.unused]]
 name = "lifecycle_msgs"
@@ -1601,7 +1596,7 @@ version = "3.1.1"
 
 [[patch.unused]]
 name = "rosapi_msgs"
-version = "2.7.0"
+version = "2.7.1"
 
 [[patch.unused]]
 name = "rosbag2_interfaces"
@@ -1609,10 +1604,18 @@ version = "0.26.11"
 
 [[patch.unused]]
 name = "rosbridge_msgs"
-version = "2.7.0"
+version = "2.7.1"
 
 [[patch.unused]]
 name = "rosgraph_msgs"
+version = "2.0.4"
+
+[[patch.unused]]
+name = "sensor_msgs"
+version = "5.3.8"
+
+[[patch.unused]]
+name = "service_msgs"
 version = "2.0.4"
 
 [[patch.unused]]
@@ -1622,6 +1625,10 @@ version = "5.3.8"
 [[patch.unused]]
 name = "statistics_msgs"
 version = "2.0.4"
+
+[[patch.unused]]
+name = "std_msgs"
+version = "5.3.8"
 
 [[patch.unused]]
 name = "std_srvs"
@@ -1637,7 +1644,7 @@ version = "2.0.4"
 
 [[patch.unused]]
 name = "tf2_msgs"
-version = "0.36.21"
+version = "0.36.22"
 
 [[patch.unused]]
 name = "theora_image_transport"
