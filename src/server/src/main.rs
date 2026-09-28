@@ -1,5 +1,5 @@
 use rclrs::{Context, CreateBasicExecutor, RclrsErrorFilter, SpinOptions};
-use tonic::transport::Server;
+use tonic::transport::{Identity, Server, ServerTlsConfig};
 use tonic_reflection::server::Builder;
 use tonic_web::GrpcWebLayer;
 use tower_http::cors::{Any, CorsLayer};
@@ -25,6 +25,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let service = RosBridgeServer::new(BridgeServer { topics });
 
+    let cert = tokio::fs::read("../../cert/server.cert").await?;
+    let key = tokio::fs::read("../../cert/server.key").await?;
+    let identity = Identity::from_pem(cert, key);
+
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_methods(Any)
@@ -32,7 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     tokio::spawn(async move {
         Server::builder()
-            .accept_http1(true)
+            .tls_config(ServerTlsConfig::new().identity(identity))?
             .layer(cors)
             .layer(GrpcWebLayer::new())
             .add_service(service)

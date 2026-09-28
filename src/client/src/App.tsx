@@ -4,7 +4,7 @@ import { Testdayo } from "./Test";
 function App() {
 
   return (
-    <GrpcProvider url="http://localhost:50051"><Testdayo /></GrpcProvider>
+    <GrpcProvider url="https://10.133.1.240:50051"><Testdayo /></GrpcProvider>
   )
 }
 
