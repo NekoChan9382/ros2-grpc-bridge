@@ -1,24 +1,24 @@
 syntax = "proto3";
 
-package robot;
+package ros_bridge;
 
-service RobotService {
-  rpc SetJoy(JoyRequest) returns (Empty);
-  rpc SubscribeJoy(Empty) returns (stream JoyResponse);
+service RosBridge {
+  rpc Publish(TopicMessage) returns (PublishResponse);
+  rpc Subscribe(SubscribeRequest) returns (stream TopicMessage);
 }
 
-message JoyRequest {
-  float left_x = 1;
-  float left_y = 2;
-  float right_x = 3;
-  float right_y = 4;
+message TopicMessage {
+  string topic = 1;
+  string type = 2;
+  bytes json = 3;
 }
 
-message JoyResponse {
-  float left_x = 1;
-  float left_y = 2;
-  float right_x = 3;
-  float right_y = 4;
+message SubscribeRequest {
+  string topic = 1;
+  string type = 2;
 }
 
-message Empty {}
+message PublishResponse {
+  bool success = 1;
+  string msg = 2;
+}
