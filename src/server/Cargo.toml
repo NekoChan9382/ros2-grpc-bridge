@@ -11,11 +11,11 @@ prost = "0.14"
 tonic-prost = "0.14"
 tonic-reflection = "0.14.6"
 tower-http = {version = "0.6", features = ["cors"]}
-rclrs = "0.7"
+rclrs = "0.8"
 tokio-stream = {version = "0.1.19", features = ["sync"]}
 serde_json = "1"
 serde = "1"
-rosidl_runtime_rs = "0.6"
+rosidl_runtime_rs = "0.7"
 
 [build-dependencies]
 tonic-prost-build = "0.14"
