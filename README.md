@@ -90,7 +90,7 @@ npm run dev
 通常のポートは `5173` ですが、使用中の場合は変わることがあります。
 DynamicMessage 版は HTTPS、`main` は HTTP です。
 
-別 PC やスマートフォンから LAN 経由で開く場合（DynamicMessage 版）:
+別 PC やスマートフォンから LAN 経由で開く場合:
 
 ```bash
 cd src/client
@@ -98,7 +98,6 @@ npm run network
 ```
 
 これは `vite --host` を実行します。例えば `https://ros-bridge.local:5173` で開きます。
-`main` には `network` script がないため、代わりに `npm run dev -- --host` を使います。
 必要に応じてファイアウォールで Web のポートと `50051/TCP` を許可してください。
 `--host` は Web サーバーを LAN に公開する指定であり、gRPC 接続先は変更しません。
 
@@ -124,5 +123,3 @@ ros2 topic echo /joy sensor_msgs/msg/Joy
 
 Wi-Fi 切替後、通常の `ros2 topic list` だけで topic が見えなくなる場合は
 `ros2 daemon stop` を実行してから再試行します。次の CLI 操作で daemon が再起動します。
-DynamicMessage 版の `/joy` 折返しと異なり、`main` は `/test` を購読するため、
-`/joy` に送信しただけではブラウザの受信表示は更新されません。
