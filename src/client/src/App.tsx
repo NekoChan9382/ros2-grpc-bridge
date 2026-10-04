@@ -1,6 +1,7 @@
 import { GrpcProvider } from "./GrpcContext";
 import { Testdayo } from "./Test";
 import { ControllerProvider } from "./ControllerContext";
+import ControllerStatus from "./ControllerStatus";
 
 function App() {
   const grpcUrl = import.meta.env.VITE_GRPC_URL;
@@ -9,7 +10,12 @@ function App() {
   }
 
   return (
-    <GrpcProvider url={grpcUrl}><ControllerProvider><Testdayo /></ControllerProvider></GrpcProvider>
+    <GrpcProvider url={grpcUrl}>
+      <ControllerProvider>
+        <ControllerStatus />
+        <Testdayo />
+      </ControllerProvider>
+    </GrpcProvider>
   )
 }
 

@@ -61,6 +61,7 @@ impl TopicManager {
     ) -> Result<broadcast::Receiver<Arc<BridgeMessage>>, String> {
         let state = self.state(topic, msg_type)?;
         self.ensure_subscription(topic, &state)?;
+        println!("Subscription connected");
         Ok(state.tx.subscribe())
     }
 
